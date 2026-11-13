@@ -1,0 +1,14 @@
+source:
+  type: kafka
+  config:
+    connection:
+      bootstrap: kafka:9092
+    topic_patterns:
+      allow:
+        - openlake_pg.public.*
+        - openlake.metrics.*
+        - openlake.alerts.*
+sink:
+  type: datahub-rest
+  config:
+    server: http://datahub-gms:8080

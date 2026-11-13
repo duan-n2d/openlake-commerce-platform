@@ -1,0 +1,17 @@
+openlake_pg.public.customers
+openlake_pg.public.products
+openlake_pg.public.inventory
+openlake_pg.public.marketing_campaigns
+openlake_pg.public.orders
+openlake_pg.public.order_items
+openlake_pg.public.payments
+openlake_pg.public.shipments
+openlake_pg.public.clickstream_events
+openlake_pg.public.support_tickets
+openlake.alerts.failed_payments
+openlake.alerts.inventory_risk
+openlake.metrics.orders_per_minute
+openlake.metrics.revenue_per_minute
+openlake.metrics.payment_success_rate
+openlake.metrics.campaign_conversion
+openlake.metrics.customer_sessions

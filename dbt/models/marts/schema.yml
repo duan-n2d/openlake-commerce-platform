@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: Customer dimension conformed from ecommerce profiles.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+  - name: dim_product
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+      - name: unit_price
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+  - name: fact_order
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: gross_revenue
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+  - name: fact_payment
+    columns:
+      - name: payment_id
+        tests: [not_null, unique]
+      - name: payment_status
+        tests:
+          - accepted_values:
+              values: ["authorized", "captured", "failed", "refunded", "cancelled"]
+  - name: mart_daily_revenue
+    description: Executive daily revenue mart.
+  - name: mart_customer_360
+    description: Customer 360 mart for BI and API serving.
+  - name: mart_campaign_performance
+    description: Campaign attribution and conversion mart.
+  - name: mart_inventory_risk
+    description: Inventory reorder and stockout risk mart.
+
+exposures:
+  - name: executive_revenue_overview
+    type: dashboard
+    maturity: medium
+    url: http://localhost:8088/superset/dashboard/openlake-executive-revenue
+    description: Superset dashboard for revenue, orders, campaign performance, and inventory risk.
+    depends_on:
+      - ref('mart_daily_revenue')
+      - ref('mart_campaign_performance')
+      - ref('mart_inventory_risk')
+    owner:
+      name: Data Platform Team
+      email: data-platform@example.com

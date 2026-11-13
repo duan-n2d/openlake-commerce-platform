@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlake.local/schemas/commerce_events.schema.json",
+  "title": "OpenLake Commerce CDC and Behavioral Events",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/order" },
+    { "$ref": "#/$defs/payment" },
+    { "$ref": "#/$defs/shipment" },
+    { "$ref": "#/$defs/inventory" },
+    { "$ref": "#/$defs/clickstream" }
+  ],
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "money": {
+      "type": "string",
+      "pattern": "^[0-9]+(\\.[0-9]{2})$"
+    },
+    "order": {
+      "type": "object",
+      "required": ["order_id", "customer_id", "order_status", "order_total", "ordered_at"],
+      "properties": {
+        "order_id": { "$ref": "#/$defs/uuid" },
+        "customer_id": { "$ref": "#/$defs/uuid" },
+        "campaign_id": { "$ref": "#/$defs/uuid" },
+        "order_status": {
+          "enum": ["created", "confirmed", "paid", "packed", "shipped", "delivered", "cancelled", "returned"]
+        },
+        "order_total": { "$ref": "#/$defs/money" },
+        "ordered_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "required": ["payment_id", "order_id", "payment_status", "amount", "processed_at"],
+      "properties": {
+        "payment_id": { "$ref": "#/$defs/uuid" },
+        "order_id": { "$ref": "#/$defs/uuid" },
+        "payment_status": { "enum": ["authorized", "captured", "failed", "refunded", "cancelled"] },
+        "amount": { "$ref": "#/$defs/money" },
+        "failure_reason": { "type": ["string", "null"] },
+        "processed_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "shipment": {
+      "type": "object",
+      "required": ["shipment_id", "order_id", "shipment_status", "updated_at"],
+      "properties": {
+        "shipment_id": { "$ref": "#/$defs/uuid" },
+        "order_id": { "$ref": "#/$defs/uuid" },
+        "carrier": { "type": "string" },
+        "shipment_status": { "enum": ["pending", "packed", "shipped", "delayed", "delivered", "returned"] },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "inventory": {
+      "type": "object",
+      "required": ["inventory_id", "product_id", "warehouse_code", "quantity_on_hand", "reorder_threshold"],
+      "properties": {
+        "inventory_id": { "$ref": "#/$defs/uuid" },
+        "product_id": { "$ref": "#/$defs/uuid" },
+        "warehouse_code": { "type": "string" },
+        "quantity_on_hand": { "type": "integer", "minimum": 0 },
+        "reorder_threshold": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "clickstream": {
+      "type": "object",
+      "required": ["event_id", "session_id", "event_type", "page_url", "occurred_at"],
+      "properties": {
+        "event_id": { "$ref": "#/$defs/uuid" },
+        "session_id": { "$ref": "#/$defs/uuid" },
+        "customer_id": { "$ref": "#/$defs/uuid" },
+        "event_type": {
+          "enum": ["page_view", "product_view", "add_to_cart", "checkout_start", "purchase", "search", "support_click"]
+        },
+        "page_url": { "type": "string" },
+        "occurred_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

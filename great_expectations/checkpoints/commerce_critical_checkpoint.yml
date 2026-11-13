@@ -1,0 +1,21 @@
+name: commerce_critical_checkpoint
+config_version: 1.0
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-openlake-commerce-critical"
+validations:
+  - batch_request:
+      datasource_name: trino_iceberg
+      data_connector_name: default_runtime_data_connector_name
+      data_asset_name: silver_orders
+      runtime_parameters:
+        query: "SELECT * FROM iceberg.silver.orders"
+      batch_identifiers:
+        default_identifier_name: silver_orders
+    expectation_suite_name: commerce.critical
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction

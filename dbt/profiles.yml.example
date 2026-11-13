@@ -1,0 +1,12 @@
+openlake_commerce:
+  target: local
+  outputs:
+    local:
+      type: trino
+      method: none
+      user: openlake
+      host: localhost
+      port: 8080
+      catalog: iceberg
+      schema: gold
+      threads: 4

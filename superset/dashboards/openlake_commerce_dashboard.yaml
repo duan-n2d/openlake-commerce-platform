@@ -1,0 +1,32 @@
+metadata:
+  version: 1.0.0
+  type: SupersetDashboard
+  project: openlake-commerce-platform
+dashboard:
+  title: OpenLake Commerce Executive Overview
+  slug: openlake-executive-revenue
+  description: Revenue, payment health, campaign performance, customer 360, inventory risk, and data quality starter dashboard.
+  database_uri: trino://openlake@trino:8080/iceberg/gold
+  pages:
+    - name: Executive revenue overview
+      datasets:
+        - mart_daily_revenue
+        - mart_product_performance
+    - name: Realtime order monitoring
+      datasets:
+        - realtime_order_metrics
+    - name: Payment health
+      datasets:
+        - mart_payment_health
+    - name: Campaign performance
+      datasets:
+        - mart_campaign_performance
+    - name: Customer 360
+      datasets:
+        - mart_customer_360
+    - name: Inventory risk
+      datasets:
+        - mart_inventory_risk
+    - name: Data quality monitoring
+      datasets:
+        - great_expectations_validation_results

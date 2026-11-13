@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: silver
+    database: iceberg
+    schema: silver
+    description: Cleaned current-state Iceberg tables produced by Flink CDC jobs.
+    freshness:
+      warn_after: { count: 15, period: minute }
+      error_after: { count: 60, period: minute }
+    loaded_at_field: record_updated_at
+    tables:
+      - name: customers
+        columns:
+          - name: customer_id
+            tests: [not_null, unique]
+      - name: products
+        columns:
+          - name: product_id
+            tests: [not_null, unique]
+      - name: campaigns
+        identifier: marketing_campaigns
+        columns:
+          - name: campaign_id
+            tests: [not_null, unique]
+      - name: orders
+        columns:
+          - name: order_id
+            tests: [not_null, unique]
+          - name: order_status
+            tests:
+              - accepted_values:
+                  values: ["created", "confirmed", "paid", "packed", "shipped", "delivered", "cancelled", "returned"]
+      - name: order_items
+        columns:
+          - name: item_id
+            tests: [not_null, unique]
+      - name: payments
+        columns:
+          - name: payment_id
+            tests: [not_null, unique]
+          - name: payment_status
+            tests:
+              - accepted_values:
+                  values: ["authorized", "captured", "failed", "refunded", "cancelled"]
+      - name: shipments
+        columns:
+          - name: shipment_id
+            tests: [not_null, unique]
+      - name: inventory
+        columns:
+          - name: inventory_id
+            tests: [not_null, unique]
+      - name: clickstream_events
+        columns:
+          - name: event_id
+            tests: [not_null, unique]

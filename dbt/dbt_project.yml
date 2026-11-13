@@ -1,0 +1,22 @@
+name: openlake_commerce
+version: "1.0.0"
+config-version: 2
+profile: openlake_commerce
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+models:
+  openlake_commerce:
+    staging:
+      +schema: silver
+      +materialized: view
+    intermediate:
+      +schema: gold
+      +materialized: view
+    marts:
+      +schema: gold
+      +materialized: table
