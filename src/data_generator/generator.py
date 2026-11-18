@@ -8,7 +8,6 @@ from decimal import Decimal
 
 from faker import Faker
 
-
 PRODUCT_CATALOG = [
     ("EL-HDP-100", "Studio Wireless Headphones", "electronics", "Northstar Audio", Decimal("129.00")),
     ("HM-COF-220", "Cold Brew Maker", "home", "Brew & Co", Decimal("42.50")),

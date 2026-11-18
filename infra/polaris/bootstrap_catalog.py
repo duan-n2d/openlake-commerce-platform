@@ -7,7 +7,6 @@ import requests
 from requests import Response
 from tenacity import retry, stop_after_attempt, wait_fixed
 
-
 MANAGEMENT_URI = os.getenv("POLARIS_MANAGEMENT_URI", "http://polaris:8181/api/management")
 CATALOG_NAME = os.getenv("POLARIS_CATALOG_NAME", "commerce")
 WAREHOUSE = os.getenv("POLARIS_WAREHOUSE", "s3://openlake/warehouse")

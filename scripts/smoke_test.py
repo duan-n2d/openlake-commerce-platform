@@ -4,7 +4,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 REQUIRED_PATHS = [
     "README.md",
     "docker-compose.yml",

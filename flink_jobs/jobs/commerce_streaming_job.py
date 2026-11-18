@@ -5,7 +5,6 @@ from pathlib import Path
 
 from pyflink.table import EnvironmentSettings, TableEnvironment
 
-
 SQL_DIR = Path(__file__).resolve().parents[1] / "sql"
 
 

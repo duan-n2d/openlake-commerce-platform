@@ -36,3 +36,21 @@ def test_metrics_endpoint_uses_repository_override() -> None:
     assert response.status_code == 200
     assert response.json()[0]["gross_revenue"] == "100.00"
     app.dependency_overrides.clear()
+
+
+def test_customer_id_is_never_interpolated_unchecked() -> None:
+    import pytest
+
+    from api.repository import AnalyticsRepository
+
+    seen: list[str] = []
+    repo = AnalyticsRepository.__new__(AnalyticsRepository)
+    repo.query = lambda sql: (seen.append(sql), [{"customer_id": "ok"}])[1]  # type: ignore[method-assign]
+
+    for bad in ["x' OR '1'='1", "a;DROP TABLE t", "", "a" * 65, "x'--"]:
+        with pytest.raises(ValueError):
+            repo.customer_profile(bad)
+    assert seen == []  # nothing reached the query engine
+
+    assert repo.customer_profile("3f2a-9C_1")["customer_id"] == "ok"
+    assert "'3f2a-9C_1'" in seen[0]

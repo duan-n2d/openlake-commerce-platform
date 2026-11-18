@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import trino
 from cachetools import TTLCache, cachedmethod
 
 from common.settings import PlatformSettings
+
+_SAFE_ID = re.compile(r"[A-Za-z0-9_-]{1,64}")
 
 
 class AnalyticsRepository:
@@ -53,13 +56,16 @@ class AnalyticsRepository:
         )
 
     def customer_profile(self, customer_id: str) -> dict[str, Any]:
+        # the id is interpolated into SQL, so only accept identifier-safe characters
+        if not _SAFE_ID.fullmatch(customer_id):
+            raise ValueError("customer_id may only contain letters, digits, '_' and '-'")
         rows = self.query(
             f"""
             SELECT *
             FROM mart_customer_360
             WHERE customer_id = '{customer_id}'
             LIMIT 1
-            """
+            """  # noqa: S608 - customer_id is validated against _SAFE_ID above
         )
         if not rows:
             raise LookupError(f"Customer {customer_id} was not found in mart_customer_360")

@@ -43,6 +43,8 @@ def customer_profile(
         return repo.customer_profile(customer_id)
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @app.get("/campaigns/performance")
