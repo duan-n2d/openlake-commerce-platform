@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: python -m pytest
+      - name: Static smoke test
+        run: python scripts/smoke_test.py --static
+      - name: Validate Docker Compose files
+        run: |
+          docker compose -f docker-compose.yml config -q
+          docker compose -f docker-compose.full.yml config -q

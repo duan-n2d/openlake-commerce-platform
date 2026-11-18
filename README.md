@@ -10,7 +10,7 @@ The project is intentionally production-style: operational Postgres tables chang
 - Uses Kafka KRaft, not ZooKeeper-era Kafka.
 - Models bronze, silver, and gold Iceberg tables with partitioning and time-travel-ready design.
 - Includes real ecommerce domains: customers, products, orders, payments, shipments, inventory, clickstream, campaigns, and support tickets.
-- Demonstrates engineering beyond SQL: Docker Compose profiles, retry scripts, tests, CI, contracts, lineage, quality gates, and API serving.
+- Demonstrates engineering beyond SQL: Docker Compose profiles, retry scripts, tests, CI checks, contracts, lineage, quality gates, and API serving.
 - Is easy to explain in interviews because every layer maps to a business problem.
 
 ## Architecture
@@ -190,9 +190,3 @@ Superset assets under `superset/dashboards/` define starter dashboards for:
 - Add an Iceberg compaction job.
 - Add a schema registry and Avro/Protobuf contracts.
 - Add contract testing between API responses and dbt marts.
-
-## CV Bullet Points
-
-- Built an end-to-end local ecommerce lakehouse with PostgreSQL CDC, Debezium, Kafka KRaft, Flink, Iceberg, Polaris, MinIO, Trino, dbt, Dagster, Great Expectations, DataHub, Superset, and FastAPI.
-- Designed bronze/silver/gold Iceberg layers and dimensional marts for revenue, customer 360, campaign performance, payment health, and inventory risk.
-- Implemented synthetic operational workload generation, CDC connector automation, data contracts, quality gates, lineage documentation, Docker Compose profiles, and CI checks.
